@@ -1,22 +1,21 @@
-var express = require("express");
-var fs = require("fs");
-var path = require("path");
-var PizZip = require("pizzip");
-var Docxtemplater = require("docxtemplater");
+const express = require("express");
+const fs = require("fs");
+const path = require("path");
+const PizZip = require("pizzip");
+const Docxtemplater = require("docxtemplater");
 
-var router = express.Router();
+const router = express.Router();
 
-router.get("/", function (req, res, next) {
+router.get("/", function (req, res) {
   try {
     const data = {
       first_name: "ගයාන්",
       last_name: "මධූශංඛ",
-      phone_no: "0714254012",
+      phone_no: "0714254030",
       date: new Date(),
     };
 
     fs.writeFileSync(path.resolve("./data/data-1.json"), JSON.stringify(data));
-
     const pizZip = new PizZip(
       fs.readFileSync(path.resolve("./templates/template-1.docx"))
     );
@@ -24,7 +23,6 @@ router.get("/", function (req, res, next) {
     doc.setData(data);
     doc.render();
     const buffer = doc.getZip().generate({ type: "nodebuffer" });
-
     const outputPath = path.resolve("./output/output-1.docx");
     fs.writeFileSync(outputPath, buffer);
     res.download(outputPath, "output.docx");

@@ -1,15 +1,21 @@
 {
   "name": "gnw.lis.be.node",
-  "version": "0.0.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "node ./bin/www"
+    "prestart":"killall -9 node",
+    "start": "nodemon ./index.js"
+  },
+  "keywords": [],
+  "author": "Gayan Madushanka",
+  "license": "GNW",
+  "devDependencies": {
+    "nodemon": "^2.0.3"
   },
   "dependencies": {
-    "body-parser": "~1.13.2",
-    "cookie-parser": "~1.3.5",
-    "express": "~4.13.1",
-    "pizzip": "^3.0.6",
-    "docxtemplater": "^3.17.6"
+    "express": "^4.17.1",
+    "docxtemplater": "^3.17.6",
+    "pizzip": "^3.0.6"
   }
 }
