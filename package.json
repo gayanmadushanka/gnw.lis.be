@@ -1,15 +1,13 @@
 {
   "name": "gnw.lis.be.node",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "private": true,
+  "description": "legal integrated system",
   "main": "index.js",
   "scripts": {
-    "prestart":"killall -9 node",
+    "prestart": "killall -9 node",
     "start": "nodemon ./index.js"
   },
-  "keywords": [],
-  "author": "Gayan Madushanka",
-  "license": "GNW",
   "devDependencies": {
     "nodemon": "^2.0.3"
   },
@@ -17,5 +15,7 @@
     "express": "^4.17.1",
     "docxtemplater": "^3.17.6",
     "pizzip": "^3.0.6"
-  }
+  },
+  "author": "Gayan Madushanka",
+  "license": "GNW"
 }
