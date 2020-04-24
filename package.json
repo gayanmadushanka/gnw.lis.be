@@ -5,7 +5,6 @@
   "description": "legal integrated system",
   "main": "index.js",
   "scripts": {
-    "prestart": "killall -9 node",
     "start": "nodemon ./index.js"
   },
   "devDependencies": {
