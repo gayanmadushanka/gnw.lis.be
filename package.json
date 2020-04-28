@@ -11,8 +11,9 @@
     "nodemon": "^2.0.3"
   },
   "dependencies": {
-    "express": "^4.17.1",
     "docxtemplater": "^3.17.6",
+    "express": "^4.17.1",
+    "fs-readdir-promise": "^1.0.1",
     "pizzip": "^3.0.6"
   },
   "author": "Gayan Madushanka",

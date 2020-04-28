@@ -2,7 +2,7 @@
 const express = require("express");
 
 // Internal Modules
-const documents = require("./routes/documents");
+const document = require("./routes/document");
 
 // App Variables
 const app = express();
@@ -20,7 +20,7 @@ app.use(function (req, res, next) {
   );
   next();
 });
-app.use("/api/v1/documents", documents);
+app.use("/api/v1/document", document);
 
 // Server Activation
 app.listen(port, () => {
