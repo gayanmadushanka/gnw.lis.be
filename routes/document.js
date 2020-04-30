@@ -37,7 +37,32 @@ router.get("/generate", function (req, res) {
     const buffer = doc.getZip().generate({ type: "nodebuffer" });
     const outputPath = path.resolve("./output/output-1.docx");
     fs.writeFileSync(outputPath, buffer);
+    res.json("success");
+  } catch (err) {
+    console.log(err.message);
+  }
+});
 
+router.get("/download", function (req, res) {
+  try {
+    const data = {
+      first_name: "ගයාන්",
+      last_name: "මධූශංඛ",
+      phone_no: "0714254030",
+      date: new Date(),
+    };
+
+    const pizZip = new PizZip(
+      fs.readFileSync(path.resolve("./templates/template-1.docx"))
+    );
+
+    const doc = new Docxtemplater(pizZip);
+    doc.setData(data);
+    doc.render();
+
+    const buffer = doc.getZip().generate({ type: "nodebuffer" });
+    const outputPath = path.resolve("./output/output-1.docx");
+    fs.writeFileSync(outputPath, buffer);
     res.set("Access-Control-Expose-Headers", "Content-Disposition");
     res.download(outputPath, "output.docx");
   } catch (err) {
