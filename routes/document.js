@@ -1,74 +1,74 @@
 const express = require("express");
 const fs = require("fs");
-const path = require("path");
+const { resolve } = require("path");
 const PizZip = require("pizzip");
 const Docxtemplater = require("docxtemplater");
 const readdir = require("fs-readdir-promise");
 
 const router = express.Router();
 
-router.get("/templates", async (req, res) => {
-  readdir(path.resolve("./templates"))
-    .then((files) => {
-      res.json(files);
-    })
-    .catch(function (err) {
-      res.json(err.message);
-    });
-});
-
-router.get("/generate", function (req, res) {
+router.get("/templates", async (_, res) => {
   try {
-    const data = {
-      first_name: "ගයාන්",
-      last_name: "මධූශංඛ",
-      phone_no: "0714254030",
-      date: new Date(),
-    };
-
-    const pizZip = new PizZip(
-      fs.readFileSync(path.resolve("./templates/template-1.docx"))
-    );
-
-    const doc = new Docxtemplater(pizZip);
-    doc.setData(data);
-    doc.render();
-
-    const buffer = doc.getZip().generate({ type: "nodebuffer" });
-    const outputPath = path.resolve("./output/output-1.docx");
-    fs.writeFileSync(outputPath, buffer);
-    res.json("success");
+    const templatePath = resolve("./templates");
+    const data = [];
+    for (const subDirectoriesAndFiles of await readdir(templatePath)) {
+      const fullPath = templatePath + "/" + subDirectoriesAndFiles;
+      const stats = fs.statSync(fullPath);
+      if (stats.isDirectory()) {
+        for (const file of await readdir(fullPath)) {
+          data.push({
+            section: subDirectoriesAndFiles,
+            templateName: file,
+          });
+        }
+      }
+    }
+    res.json(data);
   } catch (err) {
     console.log(err.message);
   }
 });
 
-router.get("/download", function (req, res) {
+router.post("/generate", function (req, res) {
   try {
-    const data = {
-      first_name: "ගයාන්",
-      last_name: "මධූශංඛ",
-      phone_no: "0714254030",
-      date: new Date(),
-    };
-
     const pizZip = new PizZip(
-      fs.readFileSync(path.resolve("./templates/template-1.docx"))
+      fs.readFileSync(
+        resolve("./templates/" + req.body.section + "/" + req.body.templateName)
+      )
     );
 
     const doc = new Docxtemplater(pizZip);
-    doc.setData(data);
+    doc.setData(req.body.data);
     doc.render();
 
+    const outputDirectoriyPath = resolve("./output/" + req.body.section);
+    createDir(outputDirectoriyPath);
+    const outputFilePath = outputDirectoriyPath + "/" + req.body.templateName;
+
     const buffer = doc.getZip().generate({ type: "nodebuffer" });
-    const outputPath = path.resolve("./output/output-1.docx");
-    fs.writeFileSync(outputPath, buffer);
+    fs.writeFileSync(outputFilePath, buffer);
     res.set("Access-Control-Expose-Headers", "Content-Disposition");
-    res.download(outputPath, "output.docx");
+    res.download(outputFilePath, req.body.templateName);
   } catch (err) {
     console.log(err.message);
   }
 });
+
+const createDir = (dirPath) => {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
+};
+
+// router.get("/templates", async (req, res) => {
+//   readdir(path.resolve("./templates"))
+//     .then((files) => {
+//       res.json(files);
+//     })
+//     .catch(function (err) {
+//       res.json(err.message);
+//     });
+// });
 
 // function errorHandler(error) {
 //   console.log(JSON.stringify({ error: error }, replaceErrors));
