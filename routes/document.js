@@ -5,10 +5,14 @@ const PizZip = require("pizzip");
 const Docxtemplater = require("docxtemplater");
 const readdir = require("fs-readdir-promise");
 
+const { sleep, createDir } = require("./helpers");
+
 const router = express.Router();
 
 router.get("/templates", async (_, res) => {
   try {
+    await sleep(2000);
+
     const templatePath = resolve("./templates");
     const data = [];
     for (const subDirectoriesAndFiles of await readdir(templatePath)) {
@@ -29,8 +33,9 @@ router.get("/templates", async (_, res) => {
   }
 });
 
-router.post("/generate", function (req, res) {
+router.post("/generate", async (req, res) => {
   try {
+    await sleep(2000);
     const pizZip = new PizZip(
       fs.readFileSync(
         resolve("./templates/" + req.body.section + "/" + req.body.templateName)
@@ -54,12 +59,6 @@ router.post("/generate", function (req, res) {
   }
 });
 
-const createDir = (dirPath) => {
-  if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath, { recursive: true });
-  }
-};
-
 // router.get("/templates", async (req, res) => {
 //   readdir(path.resolve("./templates"))
 //     .then((files) => {
@@ -69,28 +68,5 @@ const createDir = (dirPath) => {
 //       res.json(err.message);
 //     });
 // });
-
-// function errorHandler(error) {
-//   console.log(JSON.stringify({ error: error }, replaceErrors));
-//   if (error.properties && error.properties.errors instanceof Array) {
-//     const errorMessages = error.properties.errors
-//       .map(function (error) {
-//         return error.properties.explanation;
-//       })
-//       .join("\n");
-//     console.log("errorMessages", errorMessages);
-//   }
-//   throw error;
-// }
-
-// function replaceErrors(key, value) {
-//   if (value instanceof Error) {
-//     return Object.getOwnPropertyNames(value).reduce(function (error, key) {
-//       error[key] = value[key];
-//       return error;
-//     }, {});
-//   }
-//   return value;
-// }
 
 module.exports = router;
