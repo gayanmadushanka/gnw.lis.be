@@ -63,7 +63,7 @@
       "validationType": "date",
       "validations": [
         {
-          "type": "nullable",
+          "type": "required",
           "params": []
         }
       ]
