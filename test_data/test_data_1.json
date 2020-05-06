@@ -1,10 +1,11 @@
 {
-  "section": "528",
-  "templateName": "Reinstate.docx",
+  "section": "524",
+  "templateId": "Beneficiaries lives in abroad",
   "data": {
     "firstName": "ගයාන්",
     "lastName": "මධූශංඛ",
-    "phoneNo": "0714254030",
-    "date": "Sat May 02 2020"
+    "phoneNumber": "0714254030",
+    "email": "gayanmadushanka2@gmail.com",
+    "dateOfBirth": "1987/12/23"
   }
 }

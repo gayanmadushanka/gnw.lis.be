@@ -18,11 +18,14 @@ router.get("/", async (_, res) => {
       const stats = fs.statSync(fullPath);
       if (stats.isDirectory()) {
         for (const file of await readdir(fullPath)) {
-          data.push({
-            section: subDirectoriesAndFiles,
-            templateId: file.split(".")[0],
-            templateName: file,
-          });
+          const [templateId, extension] = file.split(".");
+          if (extension.toLowerCase() === "docx") {
+            data.push({
+              section: subDirectoriesAndFiles,
+              templateId: templateId,
+              templateName: file,
+            });
+          }
         }
       }
     }
