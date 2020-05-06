@@ -22,6 +22,7 @@ router.get("/templates", async (_, res) => {
         for (const file of await readdir(fullPath)) {
           data.push({
             section: subDirectoriesAndFiles,
+            templateId: file.split(".")[0],
             templateName: file,
           });
         }
@@ -33,12 +34,26 @@ router.get("/templates", async (_, res) => {
   }
 });
 
+router.get("/template/:section/:templateId/metadata", async (req, res) => {
+  try {
+    const { section, templateId } = req.params;
+    const metadata = fs.readFileSync(
+      resolve("./templates/" + section + "/" + templateId + ".json")
+    );
+    res.json(JSON.parse(metadata));
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
 router.post("/generate", async (req, res) => {
   try {
     await sleep(2000);
+
+    const templateName = req.body.templateId + ".docx";
     const pizZip = new PizZip(
       fs.readFileSync(
-        resolve("./templates/" + req.body.section + "/" + req.body.templateName)
+        resolve("./templates/" + req.body.section + "/" + templateName)
       )
     );
 
@@ -48,25 +63,15 @@ router.post("/generate", async (req, res) => {
 
     const outputDirectoriyPath = resolve("./output/" + req.body.section);
     createDir(outputDirectoriyPath);
-    const outputFilePath = outputDirectoriyPath + "/" + req.body.templateName;
+    const outputFilePath = outputDirectoriyPath + "/" + templateName;
 
     const buffer = doc.getZip().generate({ type: "nodebuffer" });
     fs.writeFileSync(outputFilePath, buffer);
     res.set("Access-Control-Expose-Headers", "Content-Disposition");
-    res.download(outputFilePath, req.body.templateName);
+    res.download(outputFilePath, templateName);
   } catch (err) {
     console.log(err.message);
   }
 });
-
-// router.get("/templates", async (req, res) => {
-//   readdir(path.resolve("./templates"))
-//     .then((files) => {
-//       res.json(files);
-//     })
-//     .catch(function (err) {
-//       res.json(err.message);
-//     });
-// });
 
 module.exports = router;

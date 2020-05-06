@@ -1,0 +1,72 @@
+{
+  "fields": [
+    {
+      "id": "firstName",
+      "label": "First Name",
+      "type": "text",
+      "validationType": "string",
+      "validations": [
+        {
+          "type": "required",
+          "params": ["this field is required"]
+        }
+      ]
+    },
+    {
+      "id": "lastName",
+      "label": "Last Name",
+      "type": "text",
+      "validationType": "string",
+      "validations": [
+        {
+          "type": "required",
+          "params": ["this field is required"]
+        }
+      ]
+    },
+    {
+      "id": "phoneNumber",
+      "label": "Phone Number",
+      "type": "text",
+      "validationType": "string",
+      "validations": [
+        {
+          "type": "required",
+          "params": ["phone number is required"]
+        },
+        {
+          "type": "phone",
+          "params": ["LK"]
+        }
+      ]
+    },
+    {
+      "id": "email",
+      "label": "Email",
+      "type": "text",
+      "validationType": "string",
+      "validations": [
+        {
+          "type": "required",
+          "params": ["this field is required"]
+        },
+        {
+          "type": "email",
+          "params": ["please enter a valid email"]
+        }
+      ]
+    },
+    {
+      "id": "dateOfBirth",
+      "label": "Date of birth",
+      "type": "date",
+      "validationType": "date",
+      "validations": [
+        {
+          "type": "nullable",
+          "params": []
+        }
+      ]
+    }
+  ]
+}
