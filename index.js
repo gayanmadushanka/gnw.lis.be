@@ -3,7 +3,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 // Internal Modules
-const document = require("./routes/document");
+const documents = require("./routes/documents");
+const templates = require("./routes/templates");
 
 // App Variables
 const app = express();
@@ -21,7 +22,8 @@ app.use(function (_, res, next) {
   );
   next();
 });
-app.use("/api/v1/document", document);
+app.use("/api/v1/documents", documents);
+app.use("/api/v1/templates", templates);
 
 // Server Activation
 app.listen(port, () => {
